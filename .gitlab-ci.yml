@@ -1,0 +1,34 @@
+stages:
+    - deploy
+
+variables:
+    DEPLOY_SUCCES_BODY: '''{ "text": "$name $CI_ENVIRONMENT_NAME has been sucessfully deployed, check $url", "chat_id": $deploy_chat_id}'''
+    DEPLOY_SUCCES: "curl --location --request POST 'https://telegram.air-thought.com/deployment' --header 'Content-Type: application/json' --data-raw $DEPLOY_SUCCES_BODY"
+
+deploy:
+    stage: deploy
+    tags:
+        - deploy
+        - dev
+    only:
+        - develop
+    environment:
+        name: development
+    script:
+        - echo "port=$port" > .env
+        - docker-compose -p webchat-dev up --build -d
+        - 'eval "$DEPLOY_SUCCES"'
+
+deploy_master:
+    stage: deploy
+    tags:
+        - deploy
+        - prod
+    only:
+        - master
+    environment:
+        name: production
+    script:
+        - echo "port=$port" > .env
+        - docker-compose up --build -d
+        - 'eval "$DEPLOY_SUCCES"'
