@@ -1,0 +1,8 @@
+{
+    "entry": ["src/client/src/main.tsx", "src/server/src/main.ts"],
+    "extensions": [".ts", ".tsx"],
+    "ignorePatterns": ["**/node_modules/**"],
+    "aliases": {
+        "styles/*": ["src/client/styles/*"]
+    }
+}
